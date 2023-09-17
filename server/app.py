@@ -122,9 +122,9 @@ def calculate_premium():
     try:
         data = request.json
         user_id = get_jwt_identity()
-        ages = data.get('ages')
-        city_tier = data.get('city_tier')
-        sum_insured = data.get('sum_insured')
+        ages = data.get('ages').split(",")
+        city_tier = data.get('cityTier')
+        sum_insured = data.get('sumAssured')
         tenure = data.get('tenure')
 
         # Retrieve user
@@ -138,10 +138,10 @@ def calculate_premium():
         for age in ages:
             insured_member = InsuredMember(
                 user=user,
-                age=age,
+                age=int(age),
                 city_tier=city_tier,
-                sum_assured=sum_insured,
-                tenure=tenure,
+                sum_assured=int(sum_insured),
+                tenure=int(tenure),
                 base_premium=calculate_base_premium(age, city_tier, sum_insured, tenure),
             )
             insured_member.save()
@@ -156,13 +156,14 @@ def calculate_premium():
             name=plan_name,
             user=user,
             insured_members=insured_members,
-            final_premium=total_premium
+            final_premium=int(total_premium)
         )
         insurance_plan.save()
 
         return jsonify({'total_premium': total_premium, 'members': insured_members, 'insurance_plan': insurance_plan}), 200
 
     except Exception as e:
+        print(e)
         return jsonify({'error': str(e)}), 500
 
 
@@ -203,7 +204,7 @@ def clear_cart():
 
 
 # Add to cart API
-@app.route('/add_to_cart/<plan_id>/', methods=['POST'])
+@app.route('/add_to_cart/<plan_id>', methods=['POST'])
 @jwt_required()
 def add_to_cart(plan_id):
     try:

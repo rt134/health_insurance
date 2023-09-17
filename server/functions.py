@@ -2,13 +2,20 @@ from models import Cart, InsurancePlan
 
 # Base premium calculation Logic => To be replaced by High precision ML model
 def calculate_base_premium(age, city_tier, sum_insured, tenure):
-    premium = 0
+    try:
+        age = int(age)
+        sum_insured = int(sum_insured)
+        tenure = int(tenure)
+    except ValueError:
+        raise ValueError("Age, sum insured, and tenure must be integers")
+
     if city_tier == 'Tier-1':
-        premium = age * 1.5 * int(tenure) * int(sum_insured)/1000
+        premium = age * 2 * tenure * sum_insured / 2000
     else:
-        premium = age * int(tenure) * int(sum_insured)/1000
+        premium = age * tenure * sum_insured / 2000
 
     return premium
+
 
 # Discount and Final Premium calculation 
 def calculate_total_premium(insured_members):
@@ -18,10 +25,14 @@ def calculate_total_premium(insured_members):
 
     for index, member in enumerate(insured_members):
         if index == 0:
+            member.discounted_rate = member.base_premium
             total_premium += member.base_premium
+            member.save()
         else:
             member.discount = 50
-            total_premium += 0.5 * member.base_premium
+            d_rate =  0.5 * member.base_premium
+            member.discounted_rate = d_rate
+            total_premium += d_rate
             member.save()
 
     return total_premium

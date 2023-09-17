@@ -18,6 +18,7 @@ class InsuredMember(Document):
     sum_assured = IntField(required=True)
     tenure = IntField(default=1, required=True)
     base_premium = FloatField(required=True)
+    discounted_rate = FloatField()
     user_relation = StringField(required=True, default="family")
     discount = IntField(required=True, default=0)
     active = BooleanField(default=False)

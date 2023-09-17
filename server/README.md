@@ -45,12 +45,16 @@
    - **Query Parameters:**
      - `is_active` (optional): Filter active or inactive plans (default: active).
    - **Authorization:** JWT token required.
+   - **Response**
+      - List of Plans current user is having
 
 4. **Get Insured Members**
    - **URL:** `/members`
    - **Method:** GET
    - **Description:** Get user's insured members.
    - **Authorization:** JWT token required.
+   - **Response**
+      - List of members to be insured
 
 5. **Calculate Premium**
    - **URL:** `/calculate_premium`
@@ -58,10 +62,14 @@
    - **Description:** Calculate insurance premium based on user input.
    - **Request Body:**
      - `ages`: List of ages of insured individuals.
-     - `city_tier`: City tier.
-     - `sum_insured`: Sum insured amount.
+     - `cityTier`: City tier.
+     - `sumAssured`: Sum insured amount.
      - `tenure`: Insurance tenure.
    - **Authorization:** JWT token required.
+   - **Response**
+      - `insurance_plan` : Insurance Plan Created
+      - `members` : Mmebers assured 
+      - `total_premium` : Total Premium of plan after discount
 
 6. **Add to Cart**
    - **URL:** `/add_to_cart/<plan_id>/`
@@ -76,6 +84,8 @@
    - **Method:** GET
    - **Description:** Get details of items in the user's cart.
    - **Authorization:** JWT token required.
+   - **Response**
+      - List of plans in the cart
 
 8. **Clear Cart**
    - **URL:** `/clear_cart`

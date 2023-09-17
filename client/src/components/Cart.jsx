@@ -22,51 +22,48 @@ const cardStyle = {
 };
 
 function Cart() {
-  const [cartItems, setCartItems] = useState([
-    {"name":"abc", "description": "xyz", "price": 123},
-    {"name":"abc", "description": "xyz", "price": 123}
-  ]);
+  const [cartItems, setCartItems] = useState([]);
   const { user } = useUserContext();
 
-  // useEffect(() => {
-  //   fetch('/cart', {
-  //     headers: {
-  //       Authorization: `Bearer ${user.token}`,
-  //     },
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => setCartItems(data))
-  //     .catch((error) => console.error('Error fetching cart items:', error));
-  // }, [user.token]);
+  useEffect(() => {
+    fetch('/cart', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => setCartItems(data))
+      .catch((error) => console.error('Error fetching cart items:', error));
+  }, []);
 
   const handleClearCart = () => {
-  //   fetch('/clear_cart', {
-  //     method: 'POST',
-  //     headers: {
-  //       Authorization: `Bearer ${user.token}`,
-  //     },
-  //   })
-  //     .then(() => {
-  //       setCartItems([]);
-  //     })
-  //     .catch((error) => console.error('Error clearing cart:', error));
+    fetch('/clear_cart', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    })
+      .then(() => {
+        setCartItems([]);
+      })
+      .catch((error) => console.error('Error clearing cart:', error));
   };
 
   const handleCheckout = () => {
-    // fetch('/checkout', {
-    //   method: 'POST',
-    //   headers: {
-    //     Authorization: `Bearer ${user.token}`,
-    //   },
-    // })
-    //   .then((response) => {
-    //     if (response.ok) {
-    //       console.log("Checked out")
-    //     } else {
-    //       console.error('Checkout failed');
-    //     }
-    //   })
-    //   .catch((error) => console.error('Error during checkout:', error));
+    fetch('/checkout', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
+          console.log("Checked out")
+        } else {
+          console.error('Checkout failed');
+        }
+      })
+      .catch((error) => console.error('Error during checkout:', error));
   };
 
   return (
