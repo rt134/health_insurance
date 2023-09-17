@@ -18,3 +18,88 @@
 - cd client
 - npm i
 - npm start
+
+
+
+## API Endpoints
+
+1. **Signup**
+   - **URL:** `/signup`
+   - **Method:** POST
+   - **Description:** Register a new user.
+   - **Request Body:**
+     - `name`: User's name.
+     - `email`: User's email.
+     - `password`: User's password.
+
+2. **Login**
+   - **URL:** `/login`
+   - **Method:** POST
+   - **Description:** Authenticate and login a user.
+   - **Request Body:**
+     - `email`: User's email.
+     - `password`: User's password.
+   - **Response:**
+     - `user`: User information (name and email).
+     - `access_token`: JWT access token for authentication.
+
+3. **Get User Plans**
+   - **URL:** `/plans`
+   - **Method:** GET
+   - **Description:** Get user's insurance plans.
+   - **Query Parameters:**
+     - `is_active` (optional): Filter active or inactive plans (default: active).
+   - **Authorization:** JWT token required.
+   - **Response**
+      - List of Plans current user is having
+
+4. **Get Insured Members**
+   - **URL:** `/members`
+   - **Method:** GET
+   - **Description:** Get user's insured members.
+   - **Authorization:** JWT token required.
+   - **Response**
+      - List of members to be insured
+
+5. **Calculate Premium**
+   - **URL:** `/calculate_premium`
+   - **Method:** POST
+   - **Description:** Calculate insurance premium based on user input.
+   - **Request Body:**
+     - `ages`: List of ages of insured individuals.
+     - `cityTier`: City tier.
+     - `sumAssured`: Sum insured amount.
+     - `tenure`: Insurance tenure.
+   - **Authorization:** JWT token required.
+   - **Response**
+      - `insurance_plan` : Insurance Plan Created
+      - `members` : Mmebers assured 
+      - `total_premium` : Total Premium of plan after discount
+
+6. **Add to Cart**
+   - **URL:** `/add_to_cart/<plan_id>/`
+   - **Method:** POST
+   - **Description:** Add an insurance plan to the user's cart.
+   - **Path Parameter:**
+     - `plan_id`: ID of the insurance plan to add.
+   - **Authorization:** JWT token required.
+
+7. **Get Cart Details**
+   - **URL:** `/cart`
+   - **Method:** GET
+   - **Description:** Get details of items in the user's cart.
+   - **Authorization:** JWT token required.
+   - **Response**
+      - List of plans in the cart
+
+8. **Clear Cart**
+   - **URL:** `/clear_cart`
+   - **Method:** DELETE
+   - **Description:** Clear the user's cart.
+   - **Authorization:** JWT token required.
+
+9. **Checkout**
+   - **URL:** `/checkout`
+   - **Method:** POST
+   - **Description:** Checkout and activate insurance plans in the user's cart.
+   - **Authorization:** JWT token required.
