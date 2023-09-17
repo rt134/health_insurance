@@ -8,6 +8,7 @@ import IconButton from '@mui/material/IconButton';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import LocalPoliceIcon from '@mui/icons-material/LocalPolice';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import ArticleIcon from '@mui/icons-material/Article';
 import { Link } from 'react-router-dom';
 
 
@@ -33,6 +34,17 @@ export default function Navbar(props) {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             {props.page}
           </Typography>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            sx={{ mr: 2 }}
+          >
+            <Link to="/plans">
+              <ArticleIcon />
+            </Link>
+          </IconButton>
           <IconButton
             size="large"
             edge="start"

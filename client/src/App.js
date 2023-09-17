@@ -4,6 +4,7 @@ import Home from './components/Home';
 import Cart from './components/Cart';
 import SignIn from './components/Signin';
 import SignUp from './components/Signup';
+import ActivePlans from './components/ActivePlans';
 import { useUserContext } from './components/UserContext';
 
 function App() {
@@ -19,6 +20,10 @@ function App() {
         <Route
           path="/cart"
           element={user ? <Cart /> : <Navigate to="/signin" replace />}
+        />
+        <Route
+          path="/plans"
+          element={user ? <ActivePlans /> : <Navigate to="/signin" replace />}
         />
         <Route
           path="/signup"

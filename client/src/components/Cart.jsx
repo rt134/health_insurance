@@ -6,6 +6,8 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import { useUserContext } from './UserContext'; // Import the UserContext
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const defaultTheme = createTheme();
 
@@ -26,41 +28,88 @@ function Cart() {
   const { user } = useUserContext();
 
   useEffect(() => {
-    fetch('/cart', {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    })
+    fetch('http://localhost:5000/cart', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        },
+      })
       .then((response) => response.json())
-      .then((data) => setCartItems(data))
+      .then((data) => {setCartItems(data)
+        console.log(data)
+      })
       .catch((error) => console.error('Error fetching cart items:', error));
   }, []);
 
   const handleClearCart = () => {
-    fetch('/clear_cart', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    })
+    fetch('http://localhost:5000/clear_cart', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        },
+      })
       .then(() => {
         setCartItems([]);
+        toast.success('Cleared cart Successfully', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       })
-      .catch((error) => console.error('Error clearing cart:', error));
+      .catch((error) => {
+        console.error('Error clearing cart:', error)
+        toast.error('Something went wrong', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      });
   };
 
   const handleCheckout = () => {
-    fetch('/checkout', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
+    fetch('http://localhost:5000/checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        },
     })
       .then((response) => {
+        setCartItems([]);
         if (response.ok) {
-          console.log("Checked out")
+          toast.success('Baught Insurance Plan Successfully', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
         } else {
-          console.error('Checkout failed');
+          toast.error('Something went wrong', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
         }
       })
       .catch((error) => console.error('Error during checkout:', error));
@@ -76,15 +125,16 @@ function Cart() {
           <p>Your cart is empty.</p>
         ) : (
           <div>
-            {cartItems.map((item, index) => (
+            {cartItems[0].insurance_plans.map((item, index) => (
               <Card key={index} variant="outlined" style={cardStyle}>
                 <CardContent>
                   <h2>{item.name}</h2>
-                  <p>{item.description}</p>
-                  <p>Price: {item.price}</p>
+                  <p>{item.status}</p>
+                  <p>Price: {item.final_premium}</p>
                 </CardContent>
               </Card>
             ))}
+            <h1>Cart Value</h1><h2>{cartItems.total_premium}</h2>
             <Button variant="contained" color="primary" onClick={handleClearCart}>
               Clear Cart
             </Button>
@@ -93,6 +143,15 @@ function Cart() {
             </Button>
           </div>
         )}
+        <ToastContainer position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover />
     </ThemeProvider>
   );
 }
