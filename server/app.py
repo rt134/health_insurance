@@ -64,15 +64,16 @@ def get_user_plans():
         user_id = get_jwt_identity()
         user = User.objects.get(id=user_id)
 
-        is_active = request.args.get('is_active', 'true').lower() == 'true'
+        # is_active = request.args.get('is_active', 'true').lower() == 'true'
 
-        plans = InsurancePlan.objects(user=user, active=is_active)
+        plans = InsurancePlan.objects(user=user, active=True)
 
         # Serialize the plans
         plan_data = []
         for plan in plans:
             plan_data.append({
                 'id': str(plan.id),
+                'name' : plan.name,
                 'final_premium': plan.final_premium,
                 'status': plan.status,
                 'active': plan.active,
@@ -182,7 +183,7 @@ def get_cart_details():
         for cart_item in cart_items:
             cart_data.append({
                 'id': str(cart_item.id),
-                'insurance_plans': [str(plan.id) for plan in cart_item.insurance_plans],
+                'insurance_plans': [plan for plan in cart_item.insurance_plans],
                 'total_premium': cart_item.total_premium
             })
 
